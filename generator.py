@@ -100,6 +100,12 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
          "name": "First Last",
          "title": "Punchy Job Title / Main Value Prop",
          "about": "A confident, 2-3 sentence engaging narrative about their expertise.",
+         "experience": [
+            {{ "company": "Company Name", "role": "Job Title", "duration": "2020 - 2023", "description": "1-2 sentences of key measurable impact." }}
+         ],
+         "education": [
+            {{ "school": "University Name", "degree": "Degree Earned", "year": "Graduation Year" }}
+         ],
          "skills": ["Skill 1", "Skill 2", "Skill 3", "Skill 4", "Skill 5"],
          "projects": [
             {{ "title": "Project Name", "role": "Their Role", "description": "1 sentence metric-driven outcome." }},
@@ -140,6 +146,12 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
             "name": "Jane/John Doe",
             "title": "Expert Professional",
             "about": "Solving complex problems with elegant solutions.",
+            "experience": [
+                { "company": "Tech Corp", "role": "Senior Developer", "duration": "2021 - Present", "description": "Led core architecture rewrite." }
+            ],
+            "education": [
+                { "school": "State University", "degree": "B.S. Computer Science", "year": "2020" }
+            ],
             "skills": ["Strategy", "Execution", "Leadership"],
             "projects": [],
             "contactEmail": "hello@example.com",

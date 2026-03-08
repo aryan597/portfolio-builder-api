@@ -2,6 +2,27 @@
     "name": "Jane Developer",
     "title": "Senior Cloud Architecture Engineer",
     "about": ".init() -> Booting core systems. Over 8 years of experience building resilient, scalable, high-throughput microservices. Obsessed with elegant abstractions and raw byte efficiency.",
+    "experience": [
+        {
+            "company": "Stripe",
+            "role": "Staff Engineer",
+            "duration": "2021 - Present",
+            "description": "Architected the global routing mesh handling 5M reqs/sec with 99.999% uptime."
+        },
+        {
+            "company": "Amazon AWS",
+            "role": "SDE II",
+            "duration": "2018 - 2021",
+            "description": "Optimized S3 block storage retrieval latency by 15% using Rust microservices."
+        }
+    ],
+    "education": [
+        {
+            "school": "MIT",
+            "degree": "M.S. Computer Science",
+            "year": "2018"
+        }
+    ],
     "skills": [
         "Go",
         "Kubernetes",
@@ -18,17 +39,12 @@
         {
             "title": "Quantum Routing Engine",
             "role": "Lead Architect",
-            "description": "Designed and deployed a highly concurrent gRPC service routing 5B+ events daily with 99.999% uptime."
+            "description": "Designed and deployed a highly concurrent gRPC service routing 5B+ events daily."
         },
         {
             "title": "Distributed Ledger DB",
             "role": "Core Contributor",
             "description": "Implemented a custom Raft consensus mechanism yielding a 40% reduction in commit latency."
-        },
-        {
-            "title": "Neural Analytics API",
-            "role": "Fullstack Dev",
-            "description": "Built an interactive React/FastAPI dashboard visualizing terabytes of real-time telemetry."
         }
     ],
     "contactEmail": "sysadmin@janedev.local",

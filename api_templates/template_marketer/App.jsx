@@ -1,187 +1,294 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
-import { TrendingUp, Zap, ArrowRight, Instagram, Twitter, MessageCircle } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence, useSpring } from 'framer-motion';
+import { Zap, TrendingUp, Users, Target, Send, ArrowUpRight, CheckCircle2, Briefcase, GraduationCap } from 'lucide-react';
 import portfolioData from './data.json';
 
-// Kinetic Marquee Component
-const Marquee = ({ text, direction = 1, speed = 20 }) => {
-    return (
-        <div className="flex overflow-hidden whitespace-nowrap bg-[var(--accent)] text-black py-4 origin-center -rotate-2 scale-110 shadow-2xl">
-            <motion.div
-                animate={{ x: direction === 1 ? [0, -1000] : [-1000, 0] }}
-                transition={{ repeat: Infinity, ease: 'linear', duration: speed }}
-                className="flex space-x-8 items-center"
-            >
-                {[...Array(10)].map((_, i) => (
-                    <span key={i} className="text-4xl md:text-6xl font-black uppercase tracking-tighter flex items-center gap-4">
-                        {text} <Zap className="w-8 h-8" />
-                    </span>
-                ))}
-            </motion.div>
-        </div>
-    );
-};
+// Neon Cursor Glow effect
+const GlowCursor = () => {
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-// 3D Tilt Card Component
-const TiltCard = ({ children, className }) => {
-    const ref = useRef(null);
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
-
-    const mouseXSpring = useSpring(x);
-    const mouseYSpring = useSpring(y);
-
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["15deg", "-15deg"]);
-    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-15deg", "15deg"]);
-
-    const handleMouseMove = (e) => {
-        if (!ref.current) return;
-        const rect = ref.current.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-        const xPct = mouseX / width - 0.5;
-        const yPct = mouseY / height - 0.5;
-        x.set(xPct);
-        y.set(yPct);
-    };
-
-    const handleMouseLeave = () => {
-        x.set(0);
-        y.set(0);
-    };
+    useEffect(() => {
+        const updateMousePosition = (e) => {
+            setMousePosition({ x: e.clientX, y: e.clientY });
+        };
+        window.addEventListener('mousemove', updateMousePosition);
+        return () => window.removeEventListener('mousemove', updateMousePosition);
+    }, []);
 
     return (
         <motion.div
-            ref={ref}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            style={{ rotateY, rotateX, transformStyle: "preserve-3d" }}
-            className={`relative rounded-3xl bg-white/5 border border-white/10 p-8 backdrop-blur-xl hover:border-[var(--accent)] transition-colors ${className}`}
-        >
-            <div style={{ transform: "translateZ(50px)", transformStyle: "preserve-3d" }} className="h-full flex flex-col justify-between">
-                {children}
-            </div>
-        </motion.div>
+            className="fixed top-0 left-0 w-[400px] h-[400px] rounded-full pointer-events-none z-0"
+            animate={{
+                x: mousePosition.x - 200,
+                y: mousePosition.y - 200,
+            }}
+            transition={{ type: "tween", ease: "backOut", duration: 0.5 }}
+            style={{
+                background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)',
+                opacity: 0.15,
+                mixBlendMode: 'screen'
+            }}
+        />
     );
 };
 
 export default function App() {
-    const { scrollYProgress } = useScroll();
-    const yParallax = useTransform(scrollYProgress, [0, 1], [0, -300]);
+    const containerRef = useRef(null);
+    const { scrollYProgress } = useScroll({ target: containerRef });
+    const yParallax = useTransform(scrollYProgress, [0, 1], [0, -200]);
+
+    const [formState, setFormState] = useState('idle');
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        setFormState('submitted');
+        setTimeout(() => setFormState('idle'), 3000);
+    };
 
     return (
-        <div className="bg-[#050505] text-[#f4f4f5] min-h-screen selection:bg-[var(--accent)] selection:text-black overflow-x-hidden font-sans pt-12">
+        <div ref={containerRef} className="bg-[var(--bg-color)] text-[var(--text-color)] min-h-screen selection:bg-[var(--accent)] selection:text-[var(--bg-color)] font-sans overflow-x-hidden relative">
+            <GlowCursor />
+
+            {/* Background Grid Pattern */}
+            <div className="fixed inset-0 z-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'linear-gradient(var(--text-color) 1px, transparent 1px), linear-gradient(90deg, var(--text-color) 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
 
             {/* HEADER */}
-            <header className="fixed top-6 left-6 right-6 z-50 flex justify-between items-center bg-black/50 backdrop-blur-2xl px-8 py-4 rounded-full border border-white/10 mix-blend-difference">
-                <span className="font-black text-xl tracking-tighter uppercase">{portfolioData.name}</span>
-                <a href={`mailto:${portfolioData.contactEmail}`} className="bg-[var(--accent)] text-black px-6 py-2 rounded-full font-bold uppercase text-sm flex items-center gap-2 hover:scale-105 transition-transform origin-center">
-                    Hire Me <ArrowRight className="w-4 h-4" />
+            <header className="fixed top-0 w-full p-6 flex justify-between items-center z-50 mix-blend-difference">
+                <div className="font-black text-2xl uppercase tracking-tighter flex items-center gap-2">
+                    <Zap className="text-[var(--accent)] fill-[var(--accent)]" /> {portfolioData.name.split(' ')[0]}
+                </div>
+                <a href="#contact" className="font-bold uppercase tracking-widest text-xs py-3 px-6 bg-[var(--text-color)] text-[var(--bg-color)] hover:bg-[var(--accent)] transition-colors rounded-sm shadow-[4px_4px_0_var(--accent)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]">
+                    Start Campaign
                 </a>
             </header>
 
-            {/* HERO & ABOUT BENTO */}
-            <main className="max-w-7xl mx-auto px-6 pt-32 pb-24 z-10 relative">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[250px]">
+            <main className="relative z-10 px-6 md:px-12 pt-32 max-w-7xl mx-auto">
 
-                    {/* Main Headline Card */}
-                    <TiltCard className="md:col-span-2 md:row-span-2 bg-gradient-to-br from-white/10 to-transparent">
-                        <div className="flex justify-between items-start mb-4">
-                            <span className="bg-[var(--accent)] text-black font-bold uppercase px-4 py-1 rounded-full text-xs tracking-widest">{portfolioData.title}</span>
-                            <TrendingUp className="text-[var(--accent)] w-8 h-8" />
-                        </div>
-                        <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mt-8">
-                            {portfolioData.name.split(' ')[0]} <br /> <span className="text-transparent border-text">{portfolioData.name.split(' ')[1] || 'CREATIVE'}</span>
-                        </h1>
-                    </TiltCard>
+                {/* HERO SECTION: Brutalist & High Energy */}
+                <section className="min-h-[80vh] flex flex-col justify-center relative">
 
-                    {/* About Card */}
-                    <TiltCard className="md:col-span-1 md:row-span-2 bg-[var(--accent)]/10 border-[var(--accent)]/30">
-                        <h3 className="text-[var(--accent)] font-bold uppercase tracking-widest mb-6">The Mission</h3>
-                        <p className="text-xl md:text-2xl font-medium leading-tight">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
+                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                        transition={{ type: "spring", stiffness: 100, damping: 10 }}
+                        className="inline-block bg-[var(--accent)] text-[var(--bg-color)] font-black uppercase tracking-widest px-4 py-2 text-sm md:text-xl w-max mb-8 rotate-3 shadow-[8px_8px_0_var(--text-color)]"
+                    >
+                        {portfolioData.title}
+                    </motion.div>
+
+                    <h1 className="text-6xl md:text-[10rem] font-black uppercase tracking-tighter leading-[0.85] mb-12 mix-blend-difference relative z-10">
+                        <motion.span initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="block overflow-hidden">
+                            <span className="block hover:-translate-y-4 hover:text-[var(--accent)] transition-transform cursor-pointer">Growth Is The</span>
+                        </motion.span>
+                        <motion.span initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="block overflow-hidden">
+                            <span className="block hover:translate-x-8 hover:text-[var(--accent)] transition-transform cursor-pointer text-transparent" style={{ WebkitTextStroke: '2px var(--text-color)' }}>Only Metric.</span>
+                        </motion.span>
+                    </h1>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-end relative z-10">
+                        <motion.p
+                            initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}
+                            className="md:col-span-2 text-2xl md:text-4xl font-medium leading-tight bg-[var(--text-color)] text-[var(--bg-color)] p-8 shadow-[12px_12px_0_var(--accent)]"
+                        >
                             {portfolioData.about}
-                        </p>
-                    </TiltCard>
+                        </motion.p>
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.6, type: "spring" }}
+                            className="hidden md:flex flex-col items-center justify-center p-8 border-4 border-[var(--text-color)] bg-[var(--bg-color)] aspect-square rounded-full animate-spin-slow"
+                        >
+                            <Target className="w-16 h-16 text-[var(--accent)] mb-2" />
+                            <span className="font-black uppercase tracking-widest text-xs text-center">Laser<br />Focused</span>
+                        </motion.div>
+                    </div>
+                </section>
 
-                    {/* Skills Marquee Card */}
-                    <TiltCard className="md:col-span-3 md:row-span-1 overflow-hidden p-0 justify-center flex flex-col group">
-                        <div className="flex overflow-hidden whitespace-nowrap opacity-50 group-hover:opacity-100 transition-opacity">
-                            <motion.div animate={{ x: [0, -1000] }} transition={{ repeat: Infinity, duration: 25, ease: "linear" }} className="flex gap-8">
-                                {[...Array(5)].map((_, i) => (
-                                    <div key={i} className="flex gap-8 items-center">
-                                        {portfolioData.skills.map(skill => (
-                                            <span key={skill} className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-transparent border-text hover:text-[var(--accent)] transition-colors cursor-crosshair">
-                                                {skill}
-                                            </span>
-                                        ))}
+                {/* BENTO BOX GRID: EXPERIENCE, SKILLS, EDUCATION */}
+                <section className="py-32 relative z-10">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-auto">
+
+                        {/* Box 1: Core Skills */}
+                        <motion.div
+                            whileHover={{ y: -10, boxShadow: "8px 8px 0 var(--accent)" }}
+                            className="md:col-span-2 md:row-span-1 bg-[var(--text-color)]/5 border-2 border-[var(--text-color)] p-8 transition-all relative overflow-hidden group"
+                        >
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)] rounded-full blur-[60px] opacity-20 group-hover:opacity-50 transition-opacity"></div>
+                            <h3 className="font-black uppercase tracking-widest text-xl mb-6 flex items-center gap-2">
+                                <TrendingUp className="text-[var(--accent)]" /> Value Multipliers
+                            </h3>
+                            <div className="flex flex-wrap gap-3 relative z-10">
+                                {portfolioData.skills && portfolioData.skills.map(skill => (
+                                    <span key={skill} className="px-4 py-2 border border-[var(--text-color)] font-bold text-sm uppercase shadow-[2px_2px_0_var(--accent)] bg-[var(--bg-color)] hover:bg-[var(--accent)] hover:text-[var(--bg-color)] transition-colors cursor-crosshair">
+                                        {skill}
+                                    </span>
+                                ))}
+                            </div>
+                        </motion.div>
+
+                        {/* Box 2: Education */}
+                        <motion.div
+                            whileHover={{ y: -10, boxShadow: "8px 8px 0 var(--accent)" }}
+                            className="md:col-span-2 md:row-span-1 bg-[var(--text-color)] border-2 border-[var(--text-color)] text-[var(--bg-color)] p-8 transition-all flex flex-col justify-between"
+                        >
+                            <h3 className="font-black uppercase tracking-widest text-xl mb-6 flex items-center gap-2 text-[var(--accent)]">
+                                <GraduationCap className="text-[var(--bg-color)]" /> Foundation
+                            </h3>
+                            {portfolioData.education && portfolioData.education.map((edu, idx) => (
+                                <div key={idx}>
+                                    <div className="text-4xl font-black uppercase mb-2 tracking-tighter">{edu.degree}</div>
+                                    <div className="text-xl font-medium opacity-80 flex justify-between">
+                                        <span>{edu.school}</span>
+                                        <span className="font-black text-[var(--accent)]">'{edu.year.slice(-2)}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </motion.div>
+
+                        {/* Box 3: Experience Timeline */}
+                        <motion.div
+                            whileHover={{ scale: 1.02 }}
+                            className="md:col-span-4 bg-[var(--bg-color)] border-2 border-[var(--text-color)] p-8 md:p-16 shadow-[16px_16px_0_var(--accent)] transition-all"
+                        >
+                            <h3 className="font-black uppercase tracking-[0.2em] text-3xl mb-16 flex items-center gap-4 border-b-4 border-[var(--text-color)] pb-6">
+                                <Briefcase className="w-10 h-10 text-[var(--accent)]" /> Track Record
+                            </h3>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+                                {portfolioData.experience && portfolioData.experience.map((exp, idx) => (
+                                    <div key={idx} className="relative group">
+                                        <div className="absolute -left-6 top-2 w-4 h-4 bg-[var(--text-color)] rounded-full group-hover:bg-[var(--accent)] transition-colors"></div>
+                                        <div className="absolute -left-[18px] top-6 w-1 h-full bg-[var(--text-color)]  group-hover:bg-[var(--accent)] transition-colors"></div>
+
+                                        <div className="bg-[var(--accent)] text-[var(--bg-color)] font-black text-xs uppercase px-3 py-1 inline-block mb-4 shadow-[2px_2px_0_var(--text-color)]">
+                                            {exp.duration}
+                                        </div>
+                                        <h4 className="text-4xl font-black uppercase tracking-tighter mb-2 group-hover:text-[var(--accent)] transition-colors">{exp.role}</h4>
+                                        <h5 className="text-xl font-bold uppercase tracking-widest opacity-60 mb-4">{exp.company}</h5>
+                                        <p className="text-lg font-medium">{exp.description}</p>
                                     </div>
                                 ))}
-                            </motion.div>
-                        </div>
-                    </TiltCard>
+                            </div>
+                        </motion.div>
 
-                </div>
+                    </div>
+                </section>
+
+                {/* PROJECTS SECTION (Kinetic Cards) */}
+                <section className="py-32 relative z-10 w-full">
+                    <motion.div
+                        initial={{ x: -100 }} whileInView={{ x: 0 }} transition={{ type: "spring", stiffness: 50 }}
+                        className="bg-[var(--text-color)] text-[var(--bg-color)] inline-block w-[120%] -ml-[10%] py-4 mb-24 rotate-[-1deg]"
+                    >
+                        <div className="max-w-7xl mx-auto px-6 font-black uppercase tracking-[0.3em] flex items-center gap-8 overflow-hidden text-2xl md:text-5xl whitespace-nowrap">
+                            <span className="text-[var(--accent)]"><Zap fill="currentColor" /></span> CAMPAIGNS
+                            <span className="text-[var(--accent)]"><Zap fill="currentColor" /></span> CAMPAIGNS
+                            <span className="text-[var(--accent)]"><Zap fill="currentColor" /></span> CAMPAIGNS
+                        </div>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full">
+                        {portfolioData.projects && portfolioData.projects.map((project, idx) => (
+                            <motion.div
+                                key={idx}
+                                whileHover={{ y: -15, scale: 1.02 }}
+                                className="group aspect-[4/3] bg-[var(--text-color)]/5 border-4 border-[var(--text-color)] p-8 md:p-12 flex flex-col justify-between hover:bg-black hover:text-white transition-all overflow-hidden relative"
+                            >
+                                <div className="absolute -right-4 -top-4 w-32 h-32 bg-[var(--accent)] rounded-full blur-[40px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                                <div className="relative z-10 flex justify-between items-start">
+                                    <div className="bg-[var(--text-color)] text-[var(--bg-color)] group-hover:bg-[var(--accent)] group-hover:text-black font-black uppercase tracking-widest text-xs px-4 py-2 shadow-[4px_4px_0_var(--accent)] group-hover:shadow-[4px_4px_0_white] transition-all">
+                                        {project.role}
+                                    </div>
+                                    <ArrowUpRight className="w-12 h-12 opacity-0 group-hover:opacity-100 group-hover:-translate-y-2 group-hover:translate-x-2 transition-all duration-300" />
+                                </div>
+
+                                <div className="relative z-10 mt-12">
+                                    <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-6 leading-none">{project.title}</h3>
+                                    <p className="text-xl md:text-2xl font-medium border-l-4 border-[var(--accent)] pl-6">{project.description}</p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </section>
+
             </main>
 
-            {/* MID-PAGE MARQUEE EXTREME */}
-            <div className="py-20 relative z-20">
-                <Marquee text="Growth Is The Only Metric" direction={1} speed={15} />
-                <div className="mt-8">
-                    <Marquee text="Drive Revenue - Capture Audiences" direction={-1} speed={25} />
+            {/* FOOTER & BRUTALIST CONTACT FORM */}
+            <footer id="contact" className="mt-20 border-t-8 border-[var(--text-color)] bg-[var(--accent)] text-black relative z-20 overflow-hidden">
+
+                {/* Massive Marquee */}
+                <div className="border-b-8 border-[var(--text-color)] bg-[var(--text-color)] text-[var(--accent)] py-4 flex whitespace-nowrap overflow-hidden">
+                    <motion.div animate={{ x: [0, -1000] }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} className="font-black text-4xl uppercase tracking-[0.2em] flex gap-8">
+                        <span>CONVERT AUDIENCES</span> <span className="text-[var(--bg-color)]">x</span>
+                        <span>DRIVE REVENUE</span> <span className="text-[var(--bg-color)]">x</span>
+                        <span>CONVERT AUDIENCES</span> <span className="text-[var(--bg-color)]">x</span>
+                        <span>DRIVE REVENUE</span> <span className="text-[var(--bg-color)]">x</span>
+                        <span>CONVERT AUDIENCES</span> <span className="text-[var(--bg-color)]">x</span>
+                    </motion.div>
                 </div>
-            </div>
 
-            {/* PROJECTS BENTO GRID */}
-            <section className="max-w-7xl mx-auto px-6 py-32 relative z-10">
-                <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-16">Results Delivered.</h2>
+                <div className="max-w-7xl mx-auto px-6 py-24 grid grid-cols-1 lg:grid-cols-2 gap-16">
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {portfolioData.projects.map((project, idx) => (
-                        <TiltCard key={idx} className={idx === 0 ? "md:col-span-2 md:aspect-[3/1]" : "aspect-square md:aspect-auto md:h-[400px]"}>
-                            <div className="flex justify-between items-start">
-                                <span className="bg-white/10 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest">{project.role}</span>
-                                <span className="font-mono text-[var(--accent)]">0{idx + 1}</span>
-                            </div>
-
-                            <div className="mt-auto">
-                                <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-4">{project.title}</h3>
-                                <p className="text-lg md:text-xl text-white/70 max-w-xl">{project.description}</p>
-                            </div>
-                        </TiltCard>
-                    ))}
-                </div>
-            </section>
-
-            {/* FOOTER */}
-            <footer className="relative bg-[var(--accent)] text-black pt-32 pb-12 px-6 rounded-t-[4rem] overflow-hidden">
-                <div className="absolute inset-0 w-full h-full pointer-events-none opacity-10" style={{ backgroundImage: 'radial-gradient(black 2px, transparent 2px)', backgroundSize: '30px 30px' }}></div>
-                <div className="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row justify-between items-end gap-16">
                     <div>
-                        <h2 className="text-6xl md:text-[10rem] font-black uppercase tracking-tighter leading-none mb-4">Let's Talk.</h2>
-                        <a href={`mailto:${portfolioData.contactEmail}`} className="text-2xl md:text-4xl font-bold border-b-4 border-black pb-2 hover:px-8 hover:bg-black hover:text-[var(--accent)] transition-all">
+                        <h2 className="text-8xl md:text-[12rem] font-black tracking-tighter uppercase leading-[0.8] mb-12">Action<br />Req.</h2>
+                        <a href={`mailto:${portfolioData.contactEmail}`} className="inline-block text-2xl md:text-4xl font-black border-b-8 border-[var(--text-color)] hover:bg-[var(--text-color)] hover:text-[var(--bg-color)] transition-all px-2">
                             {portfolioData.contactEmail}
                         </a>
                     </div>
 
-                    <div className="flex gap-4">
-                        {portfolioData.socialLinks?.twitter && (
-                            <a href="#" className="w-16 h-16 bg-black text-[var(--accent)] rounded-full flex items-center justify-center hover:scale-110 hover:-rotate-12 transition-transform shadow-2xl">
-                                <Twitter className="w-8 h-8" />
-                            </a>
-                        )}
-                        {portfolioData.socialLinks?.linkedin && (
-                            <a href="#" className="w-16 h-16 bg-black text-[var(--accent)] rounded-full flex items-center justify-center hover:scale-110 hover:rotate-12 transition-transform shadow-2xl">
-                                <MessageCircle className="w-8 h-8" />
-                            </a>
-                        )}
+                    {/* Interactive Brutalist Form */}
+                    <div className="bg-[var(--bg-color)] border-4 border-[var(--text-color)] p-8 md:p-12 shadow-[16px_16px_0_var(--text-color)] relative">
+                        <h3 className="text-3xl font-black uppercase tracking-tighter mb-8 flex items-center gap-4 text-[var(--text-color)]">
+                            <Target className="w-8 h-8 text-[var(--accent)]" /> Pitch Me.
+                        </h3>
+
+                        <form onSubmit={handleFormSubmit} className="space-y-6">
+
+                            <div className="group">
+                                <label className="font-black uppercase tracking-widest text-sm mb-2 block text-[var(--text-color)]">Identity</label>
+                                <input type="text" required className="w-full bg-[var(--text-color)]/5 border-4 border-[var(--text-color)] p-4 text-xl font-bold outline-none focus:bg-[var(--accent)] focus:border-[var(--text-color)] transition-colors text-[var(--text-color)]" />
+                            </div>
+
+                            <div className="group">
+                                <label className="font-black uppercase tracking-widest text-sm mb-2 block text-[var(--text-color)]">Destination Email</label>
+                                <input type="email" required className="w-full bg-[var(--text-color)]/5 border-4 border-[var(--text-color)] p-4 text-xl font-bold outline-none focus:bg-[var(--accent)] focus:border-[var(--text-color)] transition-colors text-[var(--text-color)]" />
+                            </div>
+
+                            <div className="group">
+                                <label className="font-black uppercase tracking-widest text-sm mb-2 block text-[var(--text-color)]">The Brief</label>
+                                <textarea required rows="4" className="w-full bg-[var(--text-color)]/5 border-4 border-[var(--text-color)] p-4 text-xl font-bold outline-none focus:bg-[var(--accent)] focus:border-[var(--text-color)] transition-colors resize-none text-[var(--text-color)]" placeholder="Numbers, goals, timelines..."></textarea>
+                            </div>
+
+                            <AnimatePresence mode="wait">
+                                {formState === 'submitted' ? (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                                        className="w-full py-6 bg-[var(--text-color)] text-[var(--bg-color)] font-black text-2xl uppercase tracking-widest flex items-center justify-center gap-4 border-4 border-[var(--text-color)]"
+                                    >
+                                        <CheckCircle2 className="w-8 h-8 text-[var(--accent)]" /> Sent to CRM.
+                                    </motion.div>
+                                ) : (
+                                    <motion.button
+                                        whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                                        type="submit"
+                                        className="w-full py-6 bg-[var(--text-color)] text-[var(--bg-color)] hover:bg-[var(--accent)] hover:text-[var(--text-color)] font-black text-2xl uppercase tracking-widest border-4 border-[var(--text-color)] shadow-[8px_8px_0_var(--text-color)] hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all flex items-center justify-center gap-4"
+                                    >
+                                        Launch <Send className="w-8 h-8" />
+                                    </motion.button>
+                                )}
+                            </AnimatePresence>
+
+                        </form>
                     </div>
-                </div>
-                <div className="max-w-7xl mx-auto mt-32 text-center text-black/50 font-bold uppercase tracking-widest text-sm">
-                    © {new Date().getFullYear()} {portfolioData.name}. All rights reserved.
+
                 </div>
             </footer>
+
+            <style dangerouslySetInnerHTML={{
+                __html: `
+        .animate-spin-slow {
+          animation: spin 10s linear infinite;
+        }
+      `}} />
         </div>
     );
 }

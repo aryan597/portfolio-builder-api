@@ -1,30 +1,51 @@
 {
-    "name": "Alex Founder",
-    "title": "Strategy & Operations Leader",
-    "about": "Building sustainable growth engines and scaling high-performance teams. Transforming complex market dynamics into clear operational execution.",
+    "name": "Sarah Executive",
+    "title": "Chief Product Officer",
+    "about": "A strategic leader bridging the gap between design, engineering, and business. I build high-performing teams that construct sustainable, billion-dollar product ecosystems.",
+    "experience": [
+        {
+            "company": "Enterprise Inc.",
+            "role": "Chief Product Officer",
+            "duration": "2020 - Present",
+            "description": "Scaled enterprise ARR by 300% and spearheaded the acquisition of two competitor platforms."
+        },
+        {
+            "company": "Growth Labs",
+            "role": "VP of Product",
+            "duration": "2015 - 2020",
+            "description": "Managed a global team of 150 PMs and Engineers across 4 continents."
+        }
+    ],
+    "education": [
+        {
+            "school": "Stanford Graduate School of Business",
+            "degree": "MBA",
+            "year": "2015"
+        }
+    ],
     "skills": [
-        "Strategic Planning",
+        "Product Strategy",
         "P&L Management",
-        "Venture Capital",
-        "M&A",
-        "Go-To-Market",
-        "OKR Frameworks"
+        "M&A Integration",
+        "Agile Leadership",
+        "Market Expansion",
+        "Board Relations"
     ],
     "projects": [
         {
-            "title": "Series B Expansion",
-            "role": "Chief Operating Officer",
-            "description": "Scaled operations from 20 to 150 employees across 3 continents, resulting in a 400% YoY revenue increase."
+            "title": "Project Olympus",
+            "role": "Executive Sponsor",
+            "description": "Launched the company's flagship AI product, reaching $50M ARR in year one."
         },
         {
-            "title": "Acquisition Blueprint",
-            "role": "VP Operations",
-            "description": "Led the operational integration of a $50M competitor acquisition, unifying tech stacks and reducing redundancies by 30%."
+            "title": "Global Restructuring",
+            "role": "Lead Architect",
+            "description": "Redesigned the entire product org structure to reduce time-to-market by 40%."
         }
     ],
-    "contactEmail": "alex@vision.co",
+    "contactEmail": "sarah.exec@boardroom.com",
     "socialLinks": {
-        "twitter": "@alexfounder",
-        "linkedin": "alex-founder"
+        "twitter": "@sarahexec",
+        "linkedin": "sarah-executive"
     }
 }

@@ -2,6 +2,32 @@
     "name": "Dr. Elena Researcher",
     "title": "Cognitive Neuroscientist",
     "about": "Exploring the intersection of artificial neural networks and human neuroplasticity. My research focuses on developing brain-computer interfaces (BCIs) to restore motor function in stroke patients.",
+    "experience": [
+        {
+            "company": "Institute for Neural Computation",
+            "role": "Lead Investigator",
+            "duration": "2020 - Present",
+            "description": "Directing a $2M NSF-funded lab exploring motor cortex decoding using non-invasive EEG arrays."
+        },
+        {
+            "company": "University Hospital",
+            "role": "Postdoctoral Fellow",
+            "duration": "2017 - 2020",
+            "description": "Conducted clinical trials for novel BCI interfaces yielding a 35% improvement in patient recovery metrics."
+        }
+    ],
+    "education": [
+        {
+            "school": "University of Cambridge",
+            "degree": "Ph.D. Cognitive Neuroscience",
+            "year": "2017"
+        },
+        {
+            "school": "UC Berkeley",
+            "degree": "B.S. Bioengineering",
+            "year": "2012"
+        }
+    ],
     "skills": [
         "fMRI Analysis",
         "Python",
@@ -20,11 +46,6 @@
             "title": "Synaptic Plasticity Modeling",
             "role": "Postdoctoral Fellow",
             "description": "Created a novel computational model of long-term depression (LTD) at the hippocampal Schaffer collateral synapse."
-        },
-        {
-            "title": "OpenBCI Integration",
-            "role": "Consultant",
-            "description": "Collaborated with an open-source hardware team to build an affordable, 16-channel EEG headset for academic labs."
         }
     ],
     "contactEmail": "elena.research@university.edu",

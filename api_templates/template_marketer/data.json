@@ -1,35 +1,52 @@
 {
-    "name": "Jordan Marketer",
-    "title": "Growth Hacker & Brand Strategist",
-    "about": "Turning attention into revenue. Architecting viral campaigns that dominate social feeds and scale CAC to $0.",
+    "name": "David Marketer",
+    "title": "Growth Marketing Director",
+    "about": "I engineer viral growth loops and 360-degree digital campaigns. Leveraging data analytics and consumer psychology, I scale startups into household names.",
+    "experience": [
+        {
+            "company": "Agency 360",
+            "role": "VP of Marketing",
+            "duration": "2021 - Present",
+            "description": "Managed $5M ad spend leading to a 450% ROI across B2C and B2B clients."
+        },
+        {
+            "company": "Social SaaS App",
+            "role": "Head of Growth",
+            "duration": "2018 - 2021",
+            "description": "Grew active user base from 10k to 2.5M within 18 months using viral referral mechanics."
+        }
+    ],
+    "education": [
+        {
+            "school": "NYU Stern",
+            "degree": "B.S. Marketing",
+            "year": "2018"
+        }
+    ],
     "skills": [
-        "TikTok Strategy",
         "Performance Marketing",
         "SEO / SEM",
         "Copywriting",
-        "Go-To-Market",
-        "Data Analytics"
+        "Viral Mechanics",
+        "Data Analytics",
+        "Meta Ads",
+        "A/B Testing"
     ],
     "projects": [
         {
-            "title": "Viral App Launch",
-            "role": "Head of Growth",
-            "description": "Generated 2.5M organic impressions in 48 hours, resulting in 100k+ App Store downloads with zero ad spend."
+            "title": "Launch Campaign X",
+            "role": "Campaign Director",
+            "description": "Generated $10M in pre-sales within 48 hours via an exclusive drop mechanic."
         },
         {
-            "title": "D2C Brand Overhaul",
-            "role": "Lead Strategist",
-            "description": "Revamped email flows and ad creatives, increasing ROAS by 350% and driving $2M in Q4."
-        },
-        {
-            "title": "B2B SaaS Pipeline",
-            "role": "Consultant",
-            "description": "Built an automated outbound engine that sourced 40 enterprise demos per month."
+            "title": "Content Machine",
+            "role": "Creator",
+            "description": "A YouTube channel scaling to 500k subscribers in 1 year focused on tech reviews."
         }
     ],
-    "contactEmail": "jordan@growth.io",
+    "contactEmail": "collab@davidgrows.com",
     "socialLinks": {
-        "twitter": "@jordan_growth",
-        "linkedin": "jordan-growth"
+        "twitter": "@davidgrows",
+        "linkedin": "david-marketer"
     }
 }

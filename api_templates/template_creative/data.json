@@ -1,0 +1,52 @@
+{
+    "name": "Alex Creative",
+    "title": "Digital Art Director",
+    "about": "Crafting visual poetry through code and pixels. I design experiences that blur the line between digital product and interactive cinematic storytelling.",
+    "experience": [
+        {
+            "company": "Studio Neo",
+            "role": "Lead Designer",
+            "duration": "2022 - Present",
+            "description": "Directed 15+ award-winning digital campaigns for Fortune 500 fashion brands."
+        },
+        {
+            "company": "Freelance",
+            "role": "Motion Designer",
+            "description": "Created bespoke WebGL landing pages resulting in 3x user engagement.",
+            "duration": "2019 - 2022"
+        }
+    ],
+    "education": [
+        {
+            "school": "Parsons School of Design",
+            "degree": "BFA Interaction Design",
+            "year": "2019"
+        }
+    ],
+    "skills": [
+        "WebGL",
+        "Three.js",
+        "Framer Motion",
+        "Cinema4D",
+        "Figma",
+        "UI/UX",
+        "Creative Direction"
+    ],
+    "projects": [
+        {
+            "title": "Neon Genesis Brand",
+            "role": "Art Director",
+            "description": "A dark-mode first e-commerce experience that won Site of the Day on Awwwards."
+        },
+        {
+            "title": "Kinetic Typography Engine",
+            "role": "Creative Developer",
+            "description": "An open-source React component library for brutalist text animations."
+        }
+    ],
+    "contactEmail": "hello@alexcreative.studio",
+    "socialLinks": {
+        "twitter": "@alex_creative",
+        "linkedin": "alex-creative"
+    }
+}
