@@ -45,7 +45,7 @@ async def analyze_resume_for_questions(file_content: bytes):
     
     response = await asyncio.to_thread(
         client.models.generate_content,
-        model='gemini-2.5-flash-8b',
+        model='gemini-3.1-flash-lite',
         contents=prompt,
         config=types.GenerateContentConfig(response_mime_type="application/json")
     )
@@ -124,7 +124,7 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
     # We use asyncio.to_thread so this synchronous network call doesn't block the main event loop
     response = await asyncio.to_thread(
         client.models.generate_content,
-        model='gemini-2.5-flash-8b',
+        model='gemini-3.1-flash-lite',
         contents=prompt,
         config=types.GenerateContentConfig(response_mime_type="application/json")
     )
