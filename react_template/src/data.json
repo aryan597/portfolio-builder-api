@@ -1,0 +1,34 @@
+{
+  "hero": {
+    "heading": "Hi, I'm Aryan",
+    "subheading": "AI Engineer & Data Scientist based in New York"
+  },
+  "about": "A passionate AI Engineer building scalable machine learning systems and stunning modern web applications.",
+  "skills": ["Python", "Machine Learning", "SQL", "React", "Tailwind CSS", "Three.js"],
+  "projects": [
+    {
+      "name": "Resume AI Analyzer",
+      "description": "An AI-powered tool that analyzes resumes and predicts candidate strength against job descriptions.",
+      "tech_stack": ["FastAPI", "Python", "Gemini", "React"]
+    },
+    {
+      "name": "AI Portfolio Builder",
+      "description": "Generates stunning 3D portfolios instantly from a PDF resume upload.",
+      "tech_stack": ["FastAPI", "React", "Three.js", "Tailwind CSS"]
+    }
+  ],
+  "experience": [
+    {
+      "role": "Senior AI Engineer",
+      "company": "Tech Corp",
+      "duration": "2023 - Present",
+      "highlights": ["Built a predictive model that improved user retention by 20%", "Mentored junior developers"]
+    }
+  ],
+  "design_preferences": {
+    "theme": "Dark Mode",
+    "style": "Glassmorphism",
+    "3d_elements": true,
+    "interactions": "Smooth Scroll"
+  }
+}
