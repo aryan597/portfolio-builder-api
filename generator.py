@@ -5,8 +5,7 @@ import shutil
 import asyncio
 from io import BytesIO
 import pdfplumber
-from google import genai
-from google.genai import types
+from openai import AsyncOpenAI
 
 def extract_text(file_content: bytes):
     text = ""
@@ -21,7 +20,7 @@ async def analyze_resume_for_questions(file_content: bytes):
     Returns 3 tailored questions to ask the user to dial in the design.
     """
     resume_text = extract_text(file_content)
-    client = genai.Client()
+    client = AsyncOpenAI()
     
     prompt = f"""
     You are a world-class creative director and web designer. Analyze this resume text and:
@@ -43,15 +42,16 @@ async def analyze_resume_for_questions(file_content: bytes):
     {resume_text}
     """
     
-    response = await asyncio.to_thread(
-        client.models.generate_content,
-        model='gemini-2.5-flash',
-        contents=prompt,
-        config=types.GenerateContentConfig(response_mime_type="application/json")
+    response = await client.chat.completions.create(
+        model="gpt-4o-mini",
+        response_format={ "type": "json_object" },
+        messages=[
+            {"role": "user", "content": prompt}
+        ]
     )
     
     try:
-        return json.loads(response.text)
+        return json.loads(response.choices[0].message.content)
     except json.JSONDecodeError:
         return {
             "archetype": "Professional",
@@ -63,7 +63,7 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
     Stage 2: Takes the resume + archetype + answers and generates the React Native code.
     """
     resume_text = extract_text(file_content)
-    client = genai.Client()
+    client = AsyncOpenAI()
     
     # Pack answers into readable string
     answers_str = "\n".join([f"Q: {k}\nA: {v}" for k, v in user_answers.items()])
@@ -120,17 +120,16 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
     }}
     """
     
-    # We use Flash here to ensure we don't hit the strict free-tier limits of the Pro model
-    # We use asyncio.to_thread so this synchronous network call doesn't block the main event loop
-    response = await asyncio.to_thread(
-        client.models.generate_content,
-        model='gemini-2.5-flash',
-        contents=prompt,
-        config=types.GenerateContentConfig(response_mime_type="application/json")
+    response = await client.chat.completions.create(
+        model="gpt-4o-mini",
+        response_format={ "type": "json_object" },
+        messages=[
+            {"role": "user", "content": prompt}
+        ]
     )
     
     try:
-        generated_data = json.loads(response.text)
+        generated_data = json.loads(response.choices[0].message.content)
         template_id = generated_data.get("template_id", 1)
         bg_col = generated_data.get("background_color", "#050505")
         txt_col = generated_data.get("text_color", "#f5f5f5")

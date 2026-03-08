@@ -3,6 +3,6 @@ uvicorn
 jinja2
 python-multipart
 pdfplumber
-google-genai
+openai
 python-dotenv
 gunicorn
