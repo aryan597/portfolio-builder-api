@@ -102,9 +102,9 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
     }}
     """
     
-    # We use Flash here but could use Pro for vastly superior coding if needed.
+    # We use Flash here to ensure we don't hit the strict free-tier limits of the Pro model
     response = client.models.generate_content(
-        model='gemini-2.5-pro', # Upgraded to Pro for complex UI generation
+        model='gemini-2.5-flash',
         contents=prompt,
         config=types.GenerateContentConfig(response_mime_type="application/json"),
     )
