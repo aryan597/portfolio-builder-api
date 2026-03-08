@@ -174,13 +174,6 @@
                 if (!response.ok) throw new Error("Analysis failed");
                 const data = await response.json();
 
-                if (data.error) {
-                    alert("AI Generation Error:\n" + data.error + "\n\nPlease check your GROQ_API_KEY environment variable on Render/Local .env.");
-                    document.getElementById('loading').classList.replace('step-active', 'step-hidden');
-                    document.getElementById('step-1').classList.replace('step-hidden', 'step-active');
-                    return;
-                }
-
                 // Populate Step 2
                 document.getElementById('archetype-display').innerText = data.archetype;
                 document.getElementById('hidden_archetype').value = data.archetype;
@@ -195,7 +188,7 @@
 
             } catch (error) {
                 console.error(error);
-                alert("An error occurred during AI analysis: " + error.message);
+                alert("An error occurred during AI analysis. Is your valid Gemini API Key in the .env?");
                 // Reset UI
                 document.getElementById('loading').classList.replace('step-active', 'step-hidden');
                 document.getElementById('step-1').classList.replace('step-hidden', 'step-active');
