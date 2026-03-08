@@ -50,7 +50,7 @@ This application is fully prepared for cloud deployment on platforms like Render
 3. Configure your environment settings:
    - **Environment:** `Python`
    - **Build Command:** `pip install -r requirements.txt`
-   - **Start Command:** `uvicorn main:app --host 0.0.0.0 --port $PORT`
+   - **Start Command:** `gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:$PORT`
 4. Add your **Environment Variables** securely on the Render dashboard:
    - `GEMINI_API_KEY` => `[Your actual Key]`
 5. Click **Deploy!** 
