@@ -42,16 +42,21 @@ async def analyze_resume_for_questions(file_content: bytes):
     {resume_text}
     """
     
-    response = await client.chat.completions.create(
-        model="gpt-4o-mini",
-        response_format={ "type": "json_object" },
-        messages=[
-            {"role": "user", "content": prompt}
-        ]
-    )
-    
     try:
+        response = await client.chat.completions.create(
+            model="gpt-4o-mini",
+            response_format={ "type": "json_object" },
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
         return json.loads(response.choices[0].message.content)
+    except Exception as e:
+        # Catch OpenAI errors (quota or invalid key) and return them directly
+        print(f"OpenAI Error: {str(e)}")
+        return {
+            "error": str(e)
+        }
     except json.JSONDecodeError:
         return {
             "archetype": "Professional",
@@ -120,16 +125,19 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
     }}
     """
     
-    response = await client.chat.completions.create(
-        model="gpt-4o-mini",
-        response_format={ "type": "json_object" },
-        messages=[
-            {"role": "user", "content": prompt}
-        ]
-    )
-    
     try:
+        response = await client.chat.completions.create(
+            model="gpt-4o-mini",
+            response_format={ "type": "json_object" },
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
         generated_data = json.loads(response.choices[0].message.content)
+    except Exception as e:
+        print(f"OpenAI Error in Stage 2: {str(e)}")
+        # Provide a fallback if it fails just so the zip doesn't crash, but it will be empty data
+        generated_data = {}
         template_id = generated_data.get("template_id", 1)
         bg_col = generated_data.get("background_color", "#050505")
         txt_col = generated_data.get("text_color", "#f5f5f5")
