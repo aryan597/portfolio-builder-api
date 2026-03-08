@@ -125,18 +125,10 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
 
     # Prepare the React template output
     template_dir = "react_template"
-    output_zip_path = "portfolio.zip"
     
     if not os.path.exists(template_dir):
         raise Exception("React scaffold template is missing.")
         
-    # Write the dynamically generated App.jsx
-    app_file_path = os.path.join(template_dir, "src", "App.jsx")
-    with open(app_file_path, "w", encoding="utf-8") as f:
-        f.write(app_jsx)
-        
-    # Override index.css with dynamic color variables
-    css_file_path = os.path.join(template_dir, "src", "index.css")
     css_content = f"""
     @import "tailwindcss";
     @theme {{
@@ -154,16 +146,29 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
       overflow-x: hidden;
     }}
     """
-    with open(css_file_path, "w", encoding="utf-8") as f:
-        f.write(css_content)
-        
-    # Create the zip archive
-    with zipfile.ZipFile(output_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+    
+    # We will build the zip entirely in memory to prevent Read-Only filesystem crashes on Render
+    zip_buffer = BytesIO()
+    
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        # 1. Walk through the existing template directory and zip everything EXCEPT node_modules/dist/git
         for root, dirs, files in os.walk(template_dir):
             dirs[:] = [d for d in dirs if d not in ('node_modules', 'dist', '.git')]
             for file in files:
                 file_path = os.path.join(root, file)
                 arcname = os.path.relpath(file_path, template_dir)
+                
+                # We skip the default App.jsx and index.css because we will dynamically inject them!
+                if arcname.replace("\\", "/") in ("src/App.jsx", "src/index.css"):
+                    continue
+                    
                 zipf.write(file_path, arcname)
                 
-    return output_zip_path
+        # 2. Inject the dynamically generated App.jsx
+        zipf.writestr("src/App.jsx", app_jsx)
+        
+        # 3. Inject the dynamically generated index.css
+        zipf.writestr("src/index.css", css_content)
+                
+    zip_buffer.seek(0)
+    return zip_buffer

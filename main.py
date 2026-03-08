@@ -1,6 +1,6 @@
 import os
 from fastapi import FastAPI, UploadFile, File, Form, Request
-from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
 
@@ -45,12 +45,12 @@ async def create_portfolio(
         "Question 3": q3
     }
     
-    zip_file_path = await generate_portfolio_zip(file_content, archetype, answers)
+    zip_buffer = await generate_portfolio_zip(file_content, archetype, answers)
 
-    return FileResponse(
-        path=zip_file_path,
+    return StreamingResponse(
+        zip_buffer,
         media_type="application/zip",
-        filename="portfolio.zip"
+        headers={"Content-Disposition": "attachment; filename=portfolio.zip"}
     )
 
 if __name__ == "__main__":
