@@ -175,7 +175,7 @@
                 const data = await response.json();
 
                 if (data.error) {
-                    alert("AI Generation Error:\n" + data.error + "\n\nPlease check your OPENAI_API_KEY environment variable on Render/Local .env.");
+                    alert("AI Generation Error:\n" + data.error + "\n\nPlease check your GROQ_API_KEY environment variable on Render/Local .env.");
                     document.getElementById('loading').classList.replace('step-active', 'step-hidden');
                     document.getElementById('step-1').classList.replace('step-hidden', 'step-active');
                     return;

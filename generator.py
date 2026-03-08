@@ -20,7 +20,10 @@ async def analyze_resume_for_questions(file_content: bytes):
     Returns 3 tailored questions to ask the user to dial in the design.
     """
     resume_text = extract_text(file_content)
-    client = AsyncOpenAI()
+    client = AsyncOpenAI(
+        base_url="https://api.groq.com/openai/v1",
+        api_key=os.environ.get("GROQ_API_KEY")
+    )
     
     prompt = f"""
     You are a world-class creative director and web designer. Analyze this resume text and:
@@ -44,7 +47,7 @@ async def analyze_resume_for_questions(file_content: bytes):
     
     try:
         response = await client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="llama3-8b-8192",
             response_format={ "type": "json_object" },
             messages=[
                 {"role": "user", "content": prompt}
@@ -68,7 +71,10 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
     Stage 2: Takes the resume + archetype + answers and generates the React Native code.
     """
     resume_text = extract_text(file_content)
-    client = AsyncOpenAI()
+    client = AsyncOpenAI(
+        base_url="https://api.groq.com/openai/v1",
+        api_key=os.environ.get("GROQ_API_KEY")
+    )
     
     # Pack answers into readable string
     answers_str = "\n".join([f"Q: {k}\nA: {v}" for k, v in user_answers.items()])
@@ -127,7 +133,7 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
     
     try:
         response = await client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="llama-3.1-70b-versatile",
             response_format={ "type": "json_object" },
             messages=[
                 {"role": "user", "content": prompt}
