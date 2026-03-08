@@ -1,0 +1,35 @@
+{
+    "name": "Jordan Marketer",
+    "title": "Growth Hacker & Brand Strategist",
+    "about": "Turning attention into revenue. Architecting viral campaigns that dominate social feeds and scale CAC to $0.",
+    "skills": [
+        "TikTok Strategy",
+        "Performance Marketing",
+        "SEO / SEM",
+        "Copywriting",
+        "Go-To-Market",
+        "Data Analytics"
+    ],
+    "projects": [
+        {
+            "title": "Viral App Launch",
+            "role": "Head of Growth",
+            "description": "Generated 2.5M organic impressions in 48 hours, resulting in 100k+ App Store downloads with zero ad spend."
+        },
+        {
+            "title": "D2C Brand Overhaul",
+            "role": "Lead Strategist",
+            "description": "Revamped email flows and ad creatives, increasing ROAS by 350% and driving $2M in Q4."
+        },
+        {
+            "title": "B2B SaaS Pipeline",
+            "role": "Consultant",
+            "description": "Built an automated outbound engine that sourced 40 enterprise demos per month."
+        }
+    ],
+    "contactEmail": "jordan@growth.io",
+    "socialLinks": {
+        "twitter": "@jordan_growth",
+        "linkedin": "jordan-growth"
+    }
+}

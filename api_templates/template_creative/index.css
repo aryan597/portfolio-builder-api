@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+    --font-sans: "Inter", system-ui, sans-serif;
+}
+
+:root {
+    --bg-color: #050505;
+    --text-color: #f5f5f5;
+    --accent: #e11d48;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    cursor: none;
+    /* Hide default cursor for custom physics cursor */
+}
+
+/* Hide scrollbar */
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}

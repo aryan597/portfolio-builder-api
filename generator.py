@@ -27,7 +27,7 @@ async def analyze_resume_for_questions(file_content: bytes):
     You are a world-class creative director and web designer. Analyze this resume text and:
     1. Determine the "Archetype" of this person (e.g., Tech Visionary, Creative Director, Business Strategist, Researcher, Builder).
     2. Generate exactly 3 highly specific, short questions to ask the candidate to determine their ideal portfolio design vibe. 
-       These questions should NOT be "what color do you want?", but deeper personality/goal questions (e.g., "Do you want this to feel like a cyberpunk terminal or a clean Apple product presentation?", "Is the goal to get hired by an enterprise or win freelance clients?").
+       These should be simple but revealing (e.g., "Do you prefer a dark mode or light mode aesthetic?", "What is your primary goal for this portfolio?", "Describe your ideal vibe in one word").
     
     Return ONLY valid JSON in this exact format, with no markdown formatting:
     {{
@@ -69,7 +69,7 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
     answers_str = "\n".join([f"Q: {k}\nA: {v}" for k, v in user_answers.items()])
     
     prompt = f"""
-    You are an award-winning UI/UX Designer and Elite React Developer (Awwwards winner level).
+    You are an award-winning UI/UX Designer and Elite Copywriter. 
     You are building a custom, high-end personal portfolio website for a candidate based strictly on their resume.
     
     Profile Archetype: {archetype}
@@ -80,27 +80,37 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
     Resume Text:
     {resume_text}
     
-    Your task is to write a single, comprehensive `App.jsx` React component using Tailwind CSS, Framer Motion, and lucide-react icons.
-    
-    CRITICAL DESIGN REQUIREMENTS for a "High-End" Website:
-    1. **Copywriting**: Do NOT use generic AI filler ("I am a passionate..."). Write punchy, confident, world-class copy. Extract their actual metrics, achievements, and unique voice from the resume.
-    2. **Typography**: Use MASSIVE, bold typography for the hero section (e.g., `text-7xl md:text-9xl tracking-tighter font-black`). Use tight leading and tracking for dramatic effect.
-    3. **Layout**: Break out of boring centered text. Use asymmetric layouts, CSS Grids, or "Bento Box" styles for skills and projects.
-    4. **Animations**: Every section must use `framer-motion`. Include parallax scroll effects, staggered reveals on lists, and a continuous scrolling Text Marquee (using framer-motion `animate="{{ x: [0, -1000] }}"`).
-    5. **Sections Required**:
-       - Dramatic Hero Section (Bold hook, clear value proposition)
-       - "About" or "Philosophy" (Engaging narrative, not a boring summary)
-       - "Featured Work" / Projects (Visual cards or grid with hover physics)
-       - Experience Timeline (Clean, scannable, metric-driven)
-       - **Contact Section**: A beautiful footer with a "Let's Work Together" massive CTA, email link, and social placeholder icons.
-    6. **Aesthetics**: Strictly follow the Vibe requested by the user. If they want Neo-Brutalism, use hard shadows and stark borders. If glassmorphism, use deep blurs.
+    Your task is to:
+    1. Select the absolute BEST Awwwards-tier boilerplate template (1-5) for this candidate:
+       1: "The Visionary" (Horizontal scroll, massive typography. For Designers/Artists)
+       2: "The Architect" (Brutalist, dark terminal, physics nodes. For Software Engineers)
+       3: "The Executive" (Minimalist glassmorphism, 3D sphere. For Founders/Directors/Leaders)
+       4: "The Alchemist" (High-energy, 3D kinetic bento boxes, neon. For Marketers/Creators)
+       5: "The Scholar" (Editorial sepia, deep reading, elegant serif. For Researchers/Academics)
+    2. Define the ideal CSS color hex codes for their chosen vibe.
+    3. Write world-class, punchy, confident copywriting for their site data payload. Do NOT use generic AI filler ("I am a passionate..."). 
     
     Output ONLY a JSON object exactly like this, with NO markdown tags outside of the JSON:
     {{
-      "app_jsx_code": "import React from 'react'... (full code block)",
-      "theme_color": "Hex color, e.g. #3b82f6",
-      "background_color": "Hex color, e.g. #050505",
-      "text_color": "Hex color, e.g. #ffffff"
+      "template_id": 1,
+      "theme_color": "#e11d48",
+      "background_color": "#050505",
+      "text_color": "#f5f5f5",
+      "data_json": {{
+         "name": "First Last",
+         "title": "Punchy Job Title / Main Value Prop",
+         "about": "A confident, 2-3 sentence engaging narrative about their expertise.",
+         "skills": ["Skill 1", "Skill 2", "Skill 3", "Skill 4", "Skill 5"],
+         "projects": [
+            {{ "title": "Project Name", "role": "Their Role", "description": "1 sentence metric-driven outcome." }},
+            {{ "title": "Project Name", "role": "Their Role", "description": "1 sentence metric-driven outcome." }}
+         ],
+         "contactEmail": "extracted_or_generated@email.com",
+         "socialLinks": {{
+            "twitter": "@handle",
+            "linkedin": "linkedin-handle"
+         }}
+      }}
     }}
     """
     
@@ -115,64 +125,88 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
     
     try:
         generated_data = json.loads(response.text)
-        app_jsx = generated_data.get("app_jsx_code", "")
-        bg_col = generated_data.get("background_color", "#0f172a")
-        txt_col = generated_data.get("text_color", "#f8fafc")
-        acc_col = generated_data.get("theme_color", "#8b5cf6")
+        template_id = generated_data.get("template_id", 1)
+        bg_col = generated_data.get("background_color", "#050505")
+        txt_col = generated_data.get("text_color", "#f5f5f5")
+        acc_col = generated_data.get("theme_color", "#e11d48")
+        data_json = generated_data.get("data_json", {})
     except Exception as e:
         print("Error generating code:", e)
-        # Fallback empty app to prevent crash
-        app_jsx = "export default function App() { return <div>Error generating site.</div> }"
-        bg_col = "#ffffff"
-        txt_col = "#000000"
-        acc_col = "#0000ff"
+        template_id = 1
+        bg_col = "#050505"
+        txt_col = "#f5f5f5"
+        acc_col = "#e11d48"
+        data_json = {
+            "name": "Jane/John Doe",
+            "title": "Expert Professional",
+            "about": "Solving complex problems with elegant solutions.",
+            "skills": ["Strategy", "Execution", "Leadership"],
+            "projects": [],
+            "contactEmail": "hello@example.com",
+            "socialLinks": {}
+        }
 
-    # Prepare the React template output
-    template_dir = "react_template"
+    # Map template_id to the actual folder name
+    template_map = {
+        1: "template_creative",
+        2: "template_engineer",
+        3: "template_executive",
+        4: "template_marketer",
+        5: "template_researcher"
+    }
     
-    if not os.path.exists(template_dir):
-        raise Exception("React scaffold template is missing.")
+    chosen_template_folder = template_map.get(template_id, "template_creative")
+    api_templates_dir = os.path.join(os.path.dirname(__file__), "api_templates", chosen_template_folder)
+    base_template_dir = os.path.join(os.path.dirname(__file__), "react_template")
+    
+    # Ensure directories exist
+    if not os.path.exists(base_template_dir):
+        raise Exception("Base React scaffold template is missing.")
+    if not os.path.exists(api_templates_dir):
+        raise Exception(f"Specific boilerplate template '{chosen_template_folder}' is missing.")
         
-    css_content = f"""
-    @import "tailwindcss";
-    @theme {{
-      --font-sans: "Inter", system-ui, sans-serif;
-    }}
+    # Read the specific App.jsx and index.css for the chosen template
+    with open(os.path.join(api_templates_dir, "App.jsx"), "r", encoding="utf-8") as f:
+        app_jsx_content = f.read()
+        
+    with open(os.path.join(api_templates_dir, "index.css"), "r", encoding="utf-8") as f:
+        base_css_content = f.read()
+        
+    # Append the AI-generated color variables explicitly to the bottom of the index.css
+    color_overrides = f"""
     :root {{
       --bg-color: {bg_col};
       --text-color: {txt_col};
       --accent: {acc_col};
     }}
-    body {{
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: var(--font-sans);
-      overflow-x: hidden;
-    }}
     """
-    
+    final_css_content = base_css_content + "\\n" + color_overrides
+
     # We will build the zip entirely in memory to prevent Read-Only filesystem crashes on Render
     zip_buffer = BytesIO()
     
     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        # 1. Walk through the existing template directory and zip everything EXCEPT node_modules/dist/git
-        for root, dirs, files in os.walk(template_dir):
+        # 1. Walk through the existing base react_template directory and zip everything EXCEPT node_modules/dist/git
+        for root, dirs, files in os.walk(base_template_dir):
             dirs[:] = [d for d in dirs if d not in ('node_modules', 'dist', '.git')]
             for file in files:
                 file_path = os.path.join(root, file)
-                arcname = os.path.relpath(file_path, template_dir)
+                arcname = os.path.relpath(file_path, base_template_dir)
                 
-                # We skip the default App.jsx and index.css because we will dynamically inject them!
-                if arcname.replace("\\", "/") in ("src/App.jsx", "src/index.css"):
+                # We skip the default App.jsx and index.css (and any existing data.json) to dynamically inject them
+                if arcname.replace("\\\\", "/") in ("src/App.jsx", "src/index.css", "src/data.json"):
                     continue
                     
                 zipf.write(file_path, arcname)
                 
-        # 2. Inject the dynamically generated App.jsx
-        zipf.writestr("src/App.jsx", app_jsx)
+        # 2. Inject the dynamically read chosen template App.jsx
+        zipf.writestr("src/App.jsx", app_jsx_content)
         
-        # 3. Inject the dynamically generated index.css
-        zipf.writestr("src/index.css", css_content)
+        # 3. Inject the dynamically read chosen template index.css (with color overrides)
+        zipf.writestr("src/index.css", final_css_content)
+        
+        # 4. Inject the AI-generated content payload data.json
+        zipf.writestr("src/data.json", json.dumps(data_json, indent=2))
                 
     zip_buffer.seek(0)
     return zip_buffer

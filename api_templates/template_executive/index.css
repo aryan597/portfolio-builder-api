@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Inter:wght@100..900&display=swap');
+
+@theme {
+    --font-sans: "Inter", system-ui, sans-serif;
+    --font-serif: "Bodoni Moda", serif;
+}
+
+:root {
+    --bg-color: #111111;
+    --text-color: #fafafa;
+    --accent: #d2a45d;
+    /* Default to sophisticated gold */
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}

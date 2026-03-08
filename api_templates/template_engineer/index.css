@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+    --font-sans: "JetBrains Mono", "Fira Code", monospace;
+}
+
+:root {
+    --bg-color: #000000;
+    --text-color: #e2e8f0;
+    --accent: #22c55e;
+    /* Default to Matrix green, can be injected later */
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+}
+
+/* Custom Outlined Text Utility */
+.border-text {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--text-color);
+}

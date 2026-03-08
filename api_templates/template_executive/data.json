@@ -1,0 +1,30 @@
+{
+    "name": "Alex Founder",
+    "title": "Strategy & Operations Leader",
+    "about": "Building sustainable growth engines and scaling high-performance teams. Transforming complex market dynamics into clear operational execution.",
+    "skills": [
+        "Strategic Planning",
+        "P&L Management",
+        "Venture Capital",
+        "M&A",
+        "Go-To-Market",
+        "OKR Frameworks"
+    ],
+    "projects": [
+        {
+            "title": "Series B Expansion",
+            "role": "Chief Operating Officer",
+            "description": "Scaled operations from 20 to 150 employees across 3 continents, resulting in a 400% YoY revenue increase."
+        },
+        {
+            "title": "Acquisition Blueprint",
+            "role": "VP Operations",
+            "description": "Led the operational integration of a $50M competitor acquisition, unifying tech stacks and reducing redundancies by 30%."
+        }
+    ],
+    "contactEmail": "alex@vision.co",
+    "socialLinks": {
+        "twitter": "@alexfounder",
+        "linkedin": "alex-founder"
+    }
+}
