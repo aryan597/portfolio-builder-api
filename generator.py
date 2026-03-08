@@ -2,6 +2,7 @@ import os
 import json
 import zipfile
 import shutil
+import asyncio
 from io import BytesIO
 import pdfplumber
 from google import genai
@@ -42,10 +43,11 @@ async def analyze_resume_for_questions(file_content: bytes):
     {resume_text}
     """
     
-    response = client.models.generate_content(
+    response = await asyncio.to_thread(
+        client.models.generate_content,
         model='gemini-2.5-flash',
         contents=prompt,
-        config=types.GenerateContentConfig(response_mime_type="application/json"),
+        config=types.GenerateContentConfig(response_mime_type="application/json")
     )
     
     try:
@@ -103,10 +105,12 @@ async def generate_portfolio_zip(file_content: bytes, archetype: str, user_answe
     """
     
     # We use Flash here to ensure we don't hit the strict free-tier limits of the Pro model
-    response = client.models.generate_content(
+    # We use asyncio.to_thread so this synchronous network call doesn't block the main event loop
+    response = await asyncio.to_thread(
+        client.models.generate_content,
         model='gemini-2.5-flash',
         contents=prompt,
-        config=types.GenerateContentConfig(response_mime_type="application/json"),
+        config=types.GenerateContentConfig(response_mime_type="application/json")
     )
     
     try:
